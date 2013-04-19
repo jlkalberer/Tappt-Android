@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Tappt-Android</string>
+    <string name="app_name">Tappt</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="email">Email</string>
+    
+    <string name="password">Password</string><string name="stay_logged_in">Stay Logged In</string><string name="login">Login</string>
+    
 
 </resources>
