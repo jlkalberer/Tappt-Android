@@ -1,9 +1,11 @@
 package com.tappt.android;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.R.string;
 
-import com.loopj.android.http.*;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.SyncHttpClient;
 
 /**
  * @author Tappt
@@ -20,7 +22,20 @@ public class TapptRestClient {
 	/**
 	 * The client used for making Rest requests.
 	 */
-	private final AsyncHttpClient client = new AsyncHttpClient();
+	private static final AsyncHttpClient Client = new AsyncHttpClient();
+	
+	private static final SyncHttpClient SyncClient = new SyncHttpClient() {
+		
+		@Override
+		public String onRequestFailed(Throwable arg0, String arg1) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	};
+	
+	private static String UserName;
+	
+	private static String Password;
 	
 	/**
 	 * Function to authenticate the user using a user name and password.
@@ -31,20 +46,15 @@ public class TapptRestClient {
 	 * @param callback The callback to run
 	 * @return True if the user is authenticated.
 	 */
-	public <TType> boolean Authenticate(String userName, String password, boolean rememberUserName, IFunction<TType> callback) {
-		RequestParams params = new RequestParams();
-		params.put("UserName", userName);
-		params.put("Password", password);
-		AsyncHttpResponseHandler responseHandler;
-	
-		client.get("http://www.google.com", new AsyncHttpResponseHandler() {
-		    @Override
-		    public void onSuccess(String response) {
-		        System.out.println(response);
-		    }
-		});
+	public static <TType> boolean Authenticate(String userName, String password, boolean rememberUserName, IFunction<TType> callback) {
+		UserName = userName;
+		Password = password;
 		
-		this.client.post(getAbsoluteUrl("api/account"), params, new AsyncHttpResponseHandler() {
+		RequestParams params = new RequestParams();
+		params.put("UserName", UserName);
+		params.put("Password", Password);
+		
+		/*Client.post(getAbsoluteUrl("api/account"), params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String response) {
             	@SuppressWarnings("unused")
@@ -57,9 +67,20 @@ public class TapptRestClient {
                 // Do something with the response
                 //System.out.println(tweetText);
             }
-        });
+        });*/
 		
-		return false;
+		String result = SyncClient.post(getAbsoluteUrl("api/account"), params);
+	    
+		return Boolean.parseBoolean(result);
+	}
+	
+	public static String Tap() {
+		SyncClient.setBasicAuth(UserName, Password);
+		
+		RequestParams params = new RequestParams();
+		params.put("AuthorizeType", "Pour");
+		
+		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
 	}
 	
 	private static String getAbsoluteUrl(String relativeUrl) {

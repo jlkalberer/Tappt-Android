@@ -200,7 +200,7 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 
-			return TapptRestClient.Authenticate(mEmail, mPassword, false);
+			return TapptRestClient.Authenticate(mEmail, mPassword, false, null);
 		}
 
 		@Override
