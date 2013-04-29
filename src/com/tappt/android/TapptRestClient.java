@@ -1,9 +1,5 @@
 package com.tappt.android;
 
-import android.R.string;
-
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 
@@ -22,7 +18,7 @@ public class TapptRestClient {
 	/**
 	 * The client used for making Rest requests.
 	 */
-	private static final AsyncHttpClient Client = new AsyncHttpClient();
+	//private static final AsyncHttpClient Client = new AsyncHttpClient();
 	
 	private static final SyncHttpClient SyncClient = new SyncHttpClient() {
 		
@@ -53,21 +49,6 @@ public class TapptRestClient {
 		RequestParams params = new RequestParams();
 		params.put("UserName", UserName);
 		params.put("Password", Password);
-		
-		/*Client.post(getAbsoluteUrl("api/account"), params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-            	@SuppressWarnings("unused")
-				int bleh = 0;
-            	bleh++;
-                // Pull out the first event on the public timeline
-                //JSONObject firstEvent = timeline.get(0);
-                //String tweetText = firstEvent.getString("text");
-
-                // Do something with the response
-                //System.out.println(tweetText);
-            }
-        });*/
 		
 		String result = SyncClient.post(getAbsoluteUrl("api/account"), params);
 	    

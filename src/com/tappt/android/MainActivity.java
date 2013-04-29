@@ -7,12 +7,6 @@ import android.os.Bundle;
 import android.view.Menu;
 
 public class MainActivity extends Activity {
-
-	public static final String PREFS_NAME = "Tappt";
-	
-	private static final String PREF_USERNAME = "username";
-	private static final String PREF_PASSWORD = "password";
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
