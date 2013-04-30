@@ -47,7 +47,7 @@ public class WriteChipActivity extends Activity {
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+	private WriteNFCTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -207,11 +207,11 @@ public class WriteChipActivity extends Activity {
 			mEmailView.setError(getString(R.string.error_field_required));
 			focusView = mEmailView;
 			cancel = true;
-		} else if (!mEmail.contains("@")) {
+		} /* else if (!mEmail.contains("@")) {
 			mEmailView.setError(getString(R.string.error_invalid_email));
 			focusView = mEmailView;
 			cancel = true;
-		}
+		}*/
 
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
@@ -222,7 +222,7 @@ public class WriteChipActivity extends Activity {
 			// perform the user login attempt.
 			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
+			mAuthTask = new WriteNFCTask();
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -272,7 +272,7 @@ public class WriteChipActivity extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class WriteNFCTask extends AsyncTask<Void, Void, Boolean> {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
