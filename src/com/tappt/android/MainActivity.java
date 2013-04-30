@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
 
 public class MainActivity extends Activity {
 	@Override
@@ -12,7 +13,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		CheckLogin();
+		//CheckLogin();
 	}
 
 	@Override
@@ -22,6 +23,11 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	public void writeTag_OnClick(View view){ 
+		Intent writeTag = new Intent(this, WriteChipActivity.class);
+		startActivity(writeTag);
+	}
+	
 	private void CheckLogin(){ 
 		SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 		

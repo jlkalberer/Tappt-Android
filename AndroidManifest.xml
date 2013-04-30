@@ -34,6 +34,15 @@
             android:name="com.tappt.android.Tap"
             android:label="@string/title_activity_tap" >
         </activity>
+        <activity
+            android:name="com.tappt.android.WriteChipActivity"
+            android:label="@string/title_activity_write_chip"
+            android:parentActivityName="com.tappt.android.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tappt.android.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
