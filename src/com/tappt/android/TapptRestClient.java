@@ -77,29 +77,10 @@ public class TapptRestClient {
 		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
 	}
 	
-	public static void GetKegerators(IFunction<List<Kegerator>> callback) {
-		ArrayList<Kegerator> output = new ArrayList<Kegerator>();
-		
-		///Client.setBasicAuth(UserName, Password);
+	public static void GetKegerators(AsyncHttpResponseHandler callback) {
 		Header header = BasicAuth();
 		Client.addHeader(header.getName(), header.getValue());
-		
-		Client.get(getAbsoluteUrl("api/kegerator"), new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(String arg0) {
-				Gson gson = new Gson();
-				List<Kegerator> kegerators = gson.fromJson(arg0, new TypeToken<List<Kegerator>>(){}.getType());
-				// callback(kegerators);
-			}
-			@Override
-			public void onFailure(Throwable e, String response) {
-		         // Response failed :(
-		     }
-		});
-		
-		//String jsonString = SyncClient.post(getAbsoluteUrl("api/kegerator"), params);
-		
-		return output;
+		Client.get(getAbsoluteUrl("api/kegerator"), callback);
 	}
 	
 	private static Header BasicAuth() {

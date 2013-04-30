@@ -21,6 +21,12 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.tappt.android.models.Kegerator;
+
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
@@ -92,25 +98,41 @@ public class WriteChipActivity extends Activity {
 					}
 				});
 		
-		final ListView listview = (ListView) findViewById(R.id.my_list);
 		
-		TapptRestClient.GetKegerators();
-		
-		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
-	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",
-	        "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux", "OS/2",
-	        "Android", "iPhone", "WindowsMobile" };
-
-	    final ArrayList<String> list = new ArrayList<String>();
-	    for (int i = 0; i < values.length; ++i) {
-	      list.add(values[i]);
-	    }
-	    final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-	        android.R.layout.simple_list_item_multiple_choice, list);
-	    listview.setAdapter(adapter);
+		TapptRestClient.GetKegerators(new GetKegeratorsResponse(this));
 	}
 
+	public class GetKegeratorsResponse extends AsyncHttpResponseHandler {
+		
+		private WriteChipActivity parentActivity;
+		
+		public GetKegeratorsResponse(WriteChipActivity parent) {
+			this.parentActivity = parent;
+		}
+		
+		@Override
+		public void onSuccess(String arg0) {
+			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+			try {
+				ArrayList<Kegerator> t = gson.fromJson(arg0, new TypeToken<ArrayList<Kegerator>>(){}.getType());
+			} catch (Exception e) {
+				// TODO: handle exception
+				String bString = "";
+			}
+			ArrayList<Kegerator> kegerators = gson.fromJson(arg0, new TypeToken<ArrayList<Kegerator>>(){}.getType());
+			
+			final ListView listview = (ListView) parentActivity.findViewById(R.id.my_list);
+
+		    final ArrayAdapter<Kegerator> adapter = new ArrayAdapter<Kegerator>(parentActivity,
+		        android.R.layout.simple_list_item_multiple_choice, kegerators);
+		    listview.setAdapter(adapter);
+		}
+		@Override
+		public void onFailure(Throwable e, String response) {
+	         // Response failed :(
+	     }
+	}
+	
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
 	 */

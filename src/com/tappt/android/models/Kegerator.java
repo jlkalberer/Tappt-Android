@@ -1,5 +1,7 @@
 package com.tappt.android.models;
 
+import java.util.ArrayList;
+
 /**
  * @author John
  * A kegerator model.
@@ -45,10 +47,10 @@ public class Kegerator {
     /**
     * Gets or sets the kegs.
     */
-    public Iterable<Keg> Kegs;
+    public ArrayList<Keg> Kegs;
 	
 	@Override
 	public String toString() {
-		return "";
+		return this.KegeratorName;
 	}
 }
