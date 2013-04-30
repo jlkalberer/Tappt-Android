@@ -94,6 +94,8 @@ public class WriteChipActivity extends Activity {
 		
 		final ListView listview = (ListView) findViewById(R.id.my_list);
 		
+		TapptRestClient.GetKegerators();
+		
 		String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
 	        "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
 	        "Linux", "OS/2", "Ubuntu", "Windows7", "Max OS X", "Linux",

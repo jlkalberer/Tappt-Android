@@ -1,7 +1,20 @@
 package com.tappt.android;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.Header;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.impl.auth.BasicScheme;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
+import com.tappt.android.models.Kegerator;
 
 /**
  * @author Tappt
@@ -18,7 +31,7 @@ public class TapptRestClient {
 	/**
 	 * The client used for making Rest requests.
 	 */
-	//private static final AsyncHttpClient Client = new AsyncHttpClient();
+	private static final AsyncHttpClient Client = new AsyncHttpClient();
 	
 	private static final SyncHttpClient SyncClient = new SyncHttpClient() {
 		
@@ -29,9 +42,9 @@ public class TapptRestClient {
 		}
 	};
 	
-	private static String UserName;
+	private static String UserName = "test";
 	
-	private static String Password;
+	private static String Password = "password";
 	
 	/**
 	 * Function to authenticate the user using a user name and password.
@@ -62,6 +75,36 @@ public class TapptRestClient {
 		params.put("AuthorizeType", "Pour");
 		
 		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
+	}
+	
+	public static void GetKegerators(IFunction<List<Kegerator>> callback) {
+		ArrayList<Kegerator> output = new ArrayList<Kegerator>();
+		
+		///Client.setBasicAuth(UserName, Password);
+		Header header = BasicAuth();
+		Client.addHeader(header.getName(), header.getValue());
+		
+		Client.get(getAbsoluteUrl("api/kegerator"), new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(String arg0) {
+				Gson gson = new Gson();
+				List<Kegerator> kegerators = gson.fromJson(arg0, new TypeToken<List<Kegerator>>(){}.getType());
+				// callback(kegerators);
+			}
+			@Override
+			public void onFailure(Throwable e, String response) {
+		         // Response failed :(
+		     }
+		});
+		
+		//String jsonString = SyncClient.post(getAbsoluteUrl("api/kegerator"), params);
+		
+		return output;
+	}
+	
+	private static Header BasicAuth() {
+		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(UserName, Password);
+	    return BasicScheme.authenticate(credentials, "UTF-8", false);
 	}
 	
 	private static String getAbsoluteUrl(String relativeUrl) {
