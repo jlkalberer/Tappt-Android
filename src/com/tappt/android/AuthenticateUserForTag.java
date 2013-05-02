@@ -1,6 +1,10 @@
 package com.tappt.android;
 
-import java.util.ArrayList;
+import com.tappt.android.models.Kegerator;
+import com.tappt.android.models.KegeratorList;
+import com.tappt.android.util.Helper;
+import com.tappt.android.util.RestResponse;
+import com.tappt.android.util.TapptRestClient;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -21,29 +25,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.tappt.android.models.Kegerator;
-
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class WriteChipActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
+public class AuthenticateUserForTag extends Activity {
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
@@ -54,6 +40,7 @@ public class WriteChipActivity extends Activity {
 	private String mPassword;
 
 	// UI references.
+	private ListView mKegeratorView;
 	private EditText mEmailView;
 	private EditText mPasswordView;
 	private View mLoginFormView;
@@ -64,11 +51,11 @@ public class WriteChipActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_write_chip);
+		setContentView(R.layout.activity_authenticate_user_for_tag);
 		setupActionBar();
 
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+		mKegeratorView = (ListView) findViewById(R.id.my_list);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
 
@@ -98,40 +85,20 @@ public class WriteChipActivity extends Activity {
 					}
 				});
 		
-		
-		TapptRestClient.GetKegerators(new GetKegeratorsResponse(this));
+		TapptRestClient.GetKegerators(
+				new RestResponse<KegeratorList>(KegeratorList.class) {
+							@Override
+							public void onSuccess(KegeratorList kegerators) {
+								AuthenticateUserForTag self = AuthenticateUserForTag.this;
+								final ListView listview = (ListView) self.findViewById(R.id.my_list);
+				
+							    final ArrayAdapter<Kegerator> adapter = new ArrayAdapter<Kegerator>(self,
+							        android.R.layout.simple_list_item_multiple_choice, kegerators);
+							    listview.setAdapter(adapter);
+							}
+						});
 	}
 
-	public class GetKegeratorsResponse extends AsyncHttpResponseHandler {
-		
-		private WriteChipActivity parentActivity;
-		
-		public GetKegeratorsResponse(WriteChipActivity parent) {
-			this.parentActivity = parent;
-		}
-		
-		@Override
-		public void onSuccess(String arg0) {
-			Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-			try {
-				ArrayList<Kegerator> t = gson.fromJson(arg0, new TypeToken<ArrayList<Kegerator>>(){}.getType());
-			} catch (Exception e) {
-				// TODO: handle exception
-				String bString = "";
-			}
-			ArrayList<Kegerator> kegerators = gson.fromJson(arg0, new TypeToken<ArrayList<Kegerator>>(){}.getType());
-			
-			final ListView listview = (ListView) parentActivity.findViewById(R.id.my_list);
-
-		    final ArrayAdapter<Kegerator> adapter = new ArrayAdapter<Kegerator>(parentActivity,
-		        android.R.layout.simple_list_item_multiple_choice, kegerators);
-		    listview.setAdapter(adapter);
-		}
-		@Override
-		public void onFailure(Throwable e, String response) {
-	         // Response failed :(
-	     }
-	}
 	
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -191,6 +158,11 @@ public class WriteChipActivity extends Activity {
 		boolean cancel = false;
 		View focusView = null;
 
+		if (mKegeratorView.getCheckedItemCount() == 0) {
+			 Helper.ShowError(this, "Sorry", "You need to select at least one Kegerator to give the user access to.");
+		     cancel =  true;
+		}
+		
 		// Check for a valid password.
 		if (TextUtils.isEmpty(mPassword)) {
 			mPasswordView.setError(getString(R.string.error_field_required));
@@ -216,7 +188,9 @@ public class WriteChipActivity extends Activity {
 		if (cancel) {
 			// There was an error; don't attempt login and focus the first
 			// form field with an error.
-			focusView.requestFocus();
+			if (focusView != null) {
+				focusView.requestFocus();
+			}
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
@@ -277,23 +251,7 @@ public class WriteChipActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
-			return true;
+			return TapptRestClient.Authenticate(mEmail, mPassword, false, null);
 		}
 
 		@Override

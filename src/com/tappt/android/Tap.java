@@ -1,5 +1,7 @@
 package com.tappt.android;
 
+import com.tappt.android.util.TapptRestClient;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;

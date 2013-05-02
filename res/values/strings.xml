@@ -4,8 +4,9 @@
     <string name="app_name">Tappt</string>
     <string name="action_settings">Settings</string>
     <string name="tap_in">Tap In</string>
-    <string name="write_tag">Authorize NFC Tag</string>
     <string name="title_activity_tap">Tap</string>
+    <string name="title_activity_write_tag">Authorize User for Tag</string>
     <string name="tap_help">Tap your phone on the Tappt device to start your pour.</string>
+    <string name="write_tag">Tap NFC tag to allow a user to authenticate with the tag.</string>
 
 </resources>

@@ -1,20 +1,14 @@
-package com.tappt.android;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.tappt.android.util;
 
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.auth.BasicScheme;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
-import com.tappt.android.models.Kegerator;
+import com.tappt.android.IFunction;
 
 /**
  * @author Tappt
@@ -42,9 +36,9 @@ public class TapptRestClient {
 		}
 	};
 	
-	private static String UserName = "test";
+	public static String UserName = "test";
 	
-	private static String Password = "password";
+	public static String Password = "password";
 	
 	/**
 	 * Function to authenticate the user using a user name and password.
@@ -56,12 +50,9 @@ public class TapptRestClient {
 	 * @return True if the user is authenticated.
 	 */
 	public static <TType> boolean Authenticate(String userName, String password, boolean rememberUserName, IFunction<TType> callback) {
-		UserName = userName;
-		Password = password;
-		
 		RequestParams params = new RequestParams();
-		params.put("UserName", UserName);
-		params.put("Password", Password);
+		params.put("UserName", userName);
+		params.put("Password", password);
 		
 		String result = SyncClient.post(getAbsoluteUrl("api/account"), params);
 	    

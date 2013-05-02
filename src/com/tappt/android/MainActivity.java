@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void writeTag_OnClick(View view){ 
-		Intent writeTag = new Intent(this, WriteChipActivity.class);
+		Intent writeTag = new Intent(this, AuthenticateUserForTag.class);
 		startActivity(writeTag);
 	}
 	

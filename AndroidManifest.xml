@@ -28,20 +28,37 @@
         <activity
             android:name="com.tappt.android.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-        </activity>
-        <activity
-            android:name="com.tappt.android.Tap"
-            android:label="@string/title_activity_tap" >
-        </activity>
-        <activity
-            android:name="com.tappt.android.WriteChipActivity"
-            android:label="@string/title_activity_write_chip"
             android:parentActivityName="com.tappt.android.MainActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tappt.android.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.tappt.android.Tap"
+            android:label="@string/title_activity_tap"
+            android:parentActivityName="com.tappt.android.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tappt.android.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.tappt.android.AuthenticateUserForTag"
+            android:label="@string/title_activity_authenticate_user_for_tag"
+            android:parentActivityName="com.tappt.android.MainActivity"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tappt.android.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.tappt.android.WriteTag"
+            android:label="@string/title_activity_write_tag"
+            android:parentActivityName="com.tappt.android.AuthenticateUserForTag" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.tappt.android.AuthenticateUserForTag" />
         </activity>
     </application>
 
