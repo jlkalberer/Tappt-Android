@@ -1,10 +1,7 @@
 package com.tappt.android;
 
-import com.tappt.android.models.Kegerator;
-import com.tappt.android.models.KegeratorList;
-import com.tappt.android.util.Helper;
-import com.tappt.android.util.RestResponse;
-import com.tappt.android.util.TapptRestClient;
+import java.util.Calendar;
+import java.util.Date;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -24,6 +21,14 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.tappt.android.models.AuthorizeType;
+import com.tappt.android.models.Kegerator;
+import com.tappt.android.models.KegeratorList;
+import com.tappt.android.models.RequestAuthentication;
+import com.tappt.android.util.Helper;
+import com.tappt.android.util.RestResponse;
+import com.tappt.android.util.TapptRestClient;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -246,20 +251,33 @@ public class AuthenticateUserForTag extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class WriteNFCTask extends AsyncTask<Void, Void, Boolean> {
+	public class WriteNFCTask extends AsyncTask<Void, Void, String> {
 		@Override
-		protected Boolean doInBackground(Void... params) {
+		protected String doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
-
-			return TapptRestClient.Authenticate(mEmail, mPassword, false, null);
+			RequestAuthentication requestAuthentication = new RequestAuthentication();
+			requestAuthentication.UserName = mEmail;
+			requestAuthentication.Password = mPassword;
+			requestAuthentication.AuthorizeType = AuthorizeType.Tag;
+			
+			Calendar cal = Calendar.getInstance(); // creates calendar
+		    cal.setTime(new Date()); // sets calendar time/date
+		    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+		    
+		    requestAuthentication.Kegerators.add(1);
+		    requestAuthentication.Kegerators.add(2);
+		    
+			requestAuthentication.ExpiresDate = cal.getTime(); 
+						
+			return TapptRestClient.AuthorizeTag(requestAuthentication);
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute(final String result) {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (success) {
+			if (result != null) {
 				finish();
 			} else {
 				mPasswordView

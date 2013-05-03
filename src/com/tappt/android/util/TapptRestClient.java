@@ -1,5 +1,8 @@
 package com.tappt.android.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import org.apache.http.Header;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.auth.BasicScheme;
@@ -9,6 +12,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.tappt.android.IFunction;
+import com.tappt.android.models.RequestAuthentication;
 
 /**
  * @author Tappt
@@ -72,6 +76,22 @@ public class TapptRestClient {
 		Header header = BasicAuth();
 		Client.addHeader(header.getName(), header.getValue());
 		Client.get(getAbsoluteUrl("api/kegerator"), callback);
+	}
+	
+	public static String AuthorizeTag(RequestAuthentication authentication) {		
+		SyncClient.setBasicAuth(UserName, Password);
+		
+		RequestParams params = new RequestParams();
+		params.put("UserName", authentication.UserName);
+		params.put("Password", authentication.Password);
+		params.put("AuthorizeType", authentication.AuthorizeType.toString());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+		
+		params.put("ExpiresDate", sdf.format(authentication.ExpiresDate));
+		params.put("Kegerators", authentication.Kegerators.toString());
+		
+		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
 	}
 	
 	private static Header BasicAuth() {
