@@ -1,11 +1,8 @@
 package com.tappt.android.util;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
-
-import org.apache.http.Header;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.impl.auth.BasicScheme;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -73,8 +70,7 @@ public class TapptRestClient {
 	}
 	
 	public static void GetKegerators(AsyncHttpResponseHandler callback) {
-		Header header = BasicAuth();
-		Client.addHeader(header.getName(), header.getValue());
+		Client.setBasicAuth(UserName, Password);
 		Client.get(getAbsoluteUrl("api/kegerator"), callback);
 	}
 	
@@ -89,14 +85,14 @@ public class TapptRestClient {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 		
 		params.put("ExpiresDate", sdf.format(authentication.ExpiresDate));
-		params.put("Kegerators", authentication.Kegerators.toString());
+		
+		ArrayList<String> kegerators = new ArrayList<String>();
+		for (Integer value : authentication.Kegerators) { 
+			kegerators.add(String.valueOf(value)); 
+		}
+		params.put("Kegerators", kegerators);
 		
 		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
-	}
-	
-	private static Header BasicAuth() {
-		UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(UserName, Password);
-	    return BasicScheme.authenticate(credentials, "UTF-8", false);
 	}
 	
 	private static String getAbsoluteUrl(String relativeUrl) {

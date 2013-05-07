@@ -7,6 +7,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -277,8 +278,10 @@ public class AuthenticateUserForTag extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 
-			if (result != null) {
-				finish();
+			if (result != null && !result.isEmpty() && result != "") {
+				Intent writeTag = new Intent(AuthenticateUserForTag.this, WriteTag.class);
+				writeTag.putExtra("AuthenticationID", result);
+				startActivity(writeTag);
 			} else {
 				mPasswordView
 						.setError(getString(R.string.error_incorrect_password));
