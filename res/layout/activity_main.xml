@@ -14,7 +14,8 @@
         android:id="@+id/tapIn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip" />
+        android:padding="10dip"
+        android:onClick="tapIn_OnClick" />
 
      <Button
         android:text="@string/write_tag"

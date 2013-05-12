@@ -23,6 +23,11 @@ public class MainActivity extends Activity {
 		return true;
 	}
 
+	public void tapIn_OnClick(View view){ 
+		Intent writeTag = new Intent(this, Tap.class);
+		startActivity(writeTag);
+	}
+	
 	public void writeTag_OnClick(View view){ 
 		Intent writeTag = new Intent(this, AuthenticateUserForTag.class);
 		startActivity(writeTag);
