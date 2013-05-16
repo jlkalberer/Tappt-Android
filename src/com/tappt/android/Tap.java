@@ -79,7 +79,7 @@ public class Tap extends Activity
     	byte[] mimeBytes = new String("application/" + this.getPackageName()).getBytes(Charset.forName("US-ASCII"));  
 
         //return NdefRecord.createMime(mimeType, mimeBytes);
-        NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_EXTERNAL_TYPE, mimeBytes, new byte[0], payload);
+        NdefRecord mimeRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA, mimeBytes, null, payload);
         return  mimeRecord;
         
     }
@@ -139,6 +139,8 @@ public class Tap extends Activity
 		        mNfcAdapter.setNdefPushMessageCallback(Tap.this, Tap.this);
 			} else {
 				// show error
+				Toast.makeText(Tap.this, "Could not get authentication key.  The service may be down.", Toast.LENGTH_LONG).show();
+				finish();
 			}
 		}
 		

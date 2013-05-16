@@ -38,7 +38,7 @@
             android:name="com.tappt.android.Tap"
             android:label="@string/title_activity_tap"
             android:parentActivityName="com.tappt.android.MainActivity"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="stateAlwaysHidden" >"
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tappt.android.MainActivity" />
@@ -55,7 +55,8 @@
         <activity
             android:name="com.tappt.android.WriteTag"
             android:label="@string/title_activity_write_tag"
-            android:parentActivityName="com.tappt.android.AuthenticateUserForTag" >
+            android:parentActivityName="com.tappt.android.AuthenticateUserForTag"
+            android:windowSoftInputMode="stateAlwaysHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tappt.android.AuthenticateUserForTag" />
