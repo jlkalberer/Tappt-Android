@@ -9,6 +9,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.SyncHttpClient;
 import com.tappt.android.IFunction;
+import com.tappt.android.models.KegeratorList;
 import com.tappt.android.models.RequestAuthentication;
 
 /**
@@ -69,7 +70,7 @@ public class TapptRestClient {
 		return SyncClient.post(getAbsoluteUrl("api/authorize"), params);
 	}
 	
-	public static void GetKegerators(AsyncHttpResponseHandler callback) {
+	public static void GetKegerators(RestResponse<KegeratorList> callback) {
 		Client.setBasicAuth(UserName, Password);
 		Client.get(getAbsoluteUrl("api/kegerator"), callback);
 	}

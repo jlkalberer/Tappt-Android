@@ -39,7 +39,24 @@
 		       android:choiceMode="multipleChoice"
 		       android:layout_width="fill_parent"
 		       android:listSelector="@android:color/darker_gray" />
-        
+		
+		<TextView
+            android:id="@+id/dateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-light"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" /> 
+            
+		<Button android:text="Calendar" 
+                android:layout_width="wrap_content" 
+                android:id="@+id/dateButton" 
+                android:layout_height="wrap_content" 
+                android:height="40dip"
+                android:onClick="onClick_dateButton"
+                ></Button>
+		
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"

@@ -2,11 +2,13 @@ package com.tappt.android;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.StringTokenizer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,7 +56,14 @@ public class AuthenticateUserForTag extends Activity {
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-
+	
+	private TextView dateLabel;
+	private Button mDateButton;
+	private String initialDate;
+	private String initialMonth;
+	private String initialYear;
+	private DatePickerDialog dialog = null;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,7 +75,9 @@ public class AuthenticateUserForTag extends Activity {
 		mKegeratorView = (ListView) findViewById(R.id.my_list);
 		mEmailView = (EditText) findViewById(R.id.email);
 		mEmailView.setText(mEmail);
-
+		mDateButton = (Button)findViewById(R.id.dateButton);
+		dateLabel = (TextView)findViewById(R.id.dateLabel);
+		
 		mPasswordView = (EditText) findViewById(R.id.password);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -105,6 +118,36 @@ public class AuthenticateUserForTag extends Activity {
 						});
 	}
 
+	public void onClick_dateButton(View view) {
+		Calendar dtTxt = null;
+
+        String preExistingDate = dateLabel.getText().toString();
+        
+        if(preExistingDate != null && !preExistingDate.equals("")){
+            StringTokenizer st = new StringTokenizer(preExistingDate,"/");
+                initialMonth = st.nextToken();
+                initialDate = st.nextToken();
+                initialYear = st.nextToken();
+                if(dialog == null)
+                dialog = new DatePickerDialog(view.getContext(),
+                                 new PickDate(),Integer.parseInt(initialYear),
+                                 Integer.parseInt(initialMonth)-1,
+                                 Integer.parseInt(initialDate));
+                dialog.updateDate(Integer.parseInt(initialYear),
+                                 Integer.parseInt(initialMonth)-1,
+                                 Integer.parseInt(initialDate));
+                
+        } else {
+            dtTxt = Calendar.getInstance();
+            if(dialog == null)
+            dialog = new DatePickerDialog(view.getContext(),new PickDate(),dtTxt.getTime().getYear(),dtTxt.getTime().getMonth(),
+                                                dtTxt.getTime().getDay());
+            dialog.updateDate(dtTxt.getTime().getYear(),dtTxt.getTime().getMonth(),
+                                                dtTxt.getTime().getDay());
+        }
+          
+          dialog.show();
+	}
 	
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
@@ -294,5 +337,15 @@ public class AuthenticateUserForTag extends Activity {
 			mAuthTask = null;
 			showProgress(false);
 		}
+	}
+	private class PickDate implements DatePickerDialog.OnDateSetListener {
+
+	    @Override
+	    public void onDateSet(DatePicker view, int year, int monthOfYear,
+	            int dayOfMonth) {
+	        view.updateDate(year, monthOfYear, dayOfMonth);
+	        dateLabel.setText(monthOfYear+"/"+dayOfMonth+"/"+year);
+	        dialog.hide();
+	    }
 	}
 }

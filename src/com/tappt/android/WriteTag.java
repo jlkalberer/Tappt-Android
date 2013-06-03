@@ -91,7 +91,11 @@ public class WriteTag extends Activity implements CreateNdefMessageCallback {
 	protected void onNewIntent(Intent intent){
 	      if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
 	          Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-	          writeTag(WriteTag.this, detectedTag, this.token);
+	          Boolean output = writeTag(WriteTag.this, detectedTag, this.token);
+	          
+	          if (output) {
+	        	  this.finish();
+	          }
 	      }
 	}
 	
