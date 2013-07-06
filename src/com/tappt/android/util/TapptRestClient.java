@@ -22,7 +22,7 @@ public class TapptRestClient {
 	/**
 	 * The base URL for the service.
 	 */
-	private static final String BASE_URL = "http://192.168.1.139/";
+	private static final String BASE_URL = "http://192.168.1.144/";
 	
 	/**
 	 * The client used for making Rest requests.

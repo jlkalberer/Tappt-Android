@@ -49,6 +49,8 @@ public class AuthenticateUserForTag extends Activity {
 	private String mEmail;
 	private String mPassword;
 
+	private Calendar mCalendar;
+	
 	// UI references.
 	private ListView mKegeratorView;
 	private EditText mEmailView;
@@ -145,8 +147,8 @@ public class AuthenticateUserForTag extends Activity {
             dialog.updateDate(dtTxt.getTime().getYear(),dtTxt.getTime().getMonth(),
                                                 dtTxt.getTime().getDay());
         }
-          
-          dialog.show();
+        
+        dialog.show();
 	}
 	
 	/**
@@ -304,14 +306,10 @@ public class AuthenticateUserForTag extends Activity {
 			requestAuthentication.Password = mPassword;
 			requestAuthentication.AuthorizeType = AuthorizeType.Tag;
 			
-			Calendar cal = Calendar.getInstance(); // creates calendar
-		    cal.setTime(new Date()); // sets calendar time/date
-		    cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
-		    
 		    requestAuthentication.Kegerators.add(1);
 		    requestAuthentication.Kegerators.add(2);
 		    
-			requestAuthentication.ExpiresDate = cal.getTime(); 
+			requestAuthentication.ExpiresDate = mCalendar.getTime();
 						
 			return TapptRestClient.AuthorizeTag(requestAuthentication);
 		}
@@ -345,7 +343,12 @@ public class AuthenticateUserForTag extends Activity {
 	            int dayOfMonth) {
 	        view.updateDate(year, monthOfYear, dayOfMonth);
 	        dateLabel.setText(monthOfYear+"/"+dayOfMonth+"/"+year);
-	        dialog.hide();
+	        
+	        mCalendar = Calendar.getInstance(); // creates calendar
+	        mCalendar.set(year, monthOfYear, dayOfMonth); // sets calendar time/date
+		    //cal.add(Calendar.HOUR_OF_DAY, 1); // adds one hour
+	        
+		    dialog.hide();
 	    }
 	}
 }
